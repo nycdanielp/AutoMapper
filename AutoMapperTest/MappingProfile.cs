@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AutoMapperTest
 {
@@ -12,8 +10,16 @@ namespace AutoMapperTest
         {
             CreateMap<Source, Destination>()
                 .ForMember(s => s.addresses, c => c.MapFrom(m => m.sourceAddress));
-            CreateMap<SourceAddress, Address>();
-            CreateMap<SourceAddress, Zipcode>();
+
+            // If you do anything custom, you can't use ReverseMap
+            CreateMap<Destination, Source>()
+                .ForMember(s => s.sourceAddress, c => c.MapFrom(m => m.addresses.FirstOrDefault()))
+                .ForPath(s => s.sourceAddress.Zip, c => c.MapFrom(m => m.addresses.FirstOrDefault().zipcode.Zip));
+
+            CreateMap<SourceAddress, Address>()
+                .ReverseMap();
+            CreateMap<SourceAddress, Zipcode>()
+                .ReverseMap();
             CreateMap<SourceAddress, IEnumerable<Address>>()
                 .ConvertUsing<AddressConverter>();
         }

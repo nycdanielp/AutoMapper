@@ -35,7 +35,9 @@ namespace AutoMapperTest.Controllers
                 }
             };
 
-            Destination destination = _mapper.Map<Source,Destination>(source);
+            Destination destination = _mapper.Map<Source, Destination>(source);
+
+            Source newSource = _mapper.Map<Destination, Source>(destination);
 
             return new string[] { "value1", "value2" };
         }
